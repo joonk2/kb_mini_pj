@@ -18,5 +18,15 @@ spring:
 
 dart:
   api:
-    key: ${DART_API_KEY}
+    key: ${DART_API_KEY:}
     base-url: https://opendart.fss.or.kr/api
+
+gemini:
+  api:
+    key: ${GEMINI_API_KEY:}
+    base-url: https://generativelanguage.googleapis.com
+    model: ${GEMINI_MODEL:gemini-2.5-flash}
+
+rm:
+  data:
+    path: ${RM_DATA_PATH:../../RM_Prior_Knowledge_100.csv}
