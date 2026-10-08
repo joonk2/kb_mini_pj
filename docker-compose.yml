@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: kb-gap-postgres
+    environment:
+      POSTGRES_DB: ${DB_NAME:-gap_agent}
+      POSTGRES_USER: ${DB_USERNAME:-gap}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-gap}
+      TZ: Asia/Seoul
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # 볼륨이 비어 있을 때(최초 실행)만 실행된다
+      - ./backend/springboot/src/main/resources/db/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-gap} -d ${DB_NAME:-gap_agent}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:
